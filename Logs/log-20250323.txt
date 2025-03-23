@@ -1,0 +1,17 @@
+2025-03-23 00:49:30.387 +01:00 [INF] Starting scraping of 1fodiscount at https://www.1fodiscount.com/f7-carte-graphique/w33-Nvidia%20Geforce%20RTX%205090/w33-AMD%20Radeon%20RX%209070%20XT/en-stock/#filter/
+2025-03-23 00:49:30.694 +01:00 [INF] No in-stock products found at the moment.
+2025-03-23 01:06:16.808 +01:00 [INF] In-stock products:
+2025-03-23 01:06:16.826 +01:00 [INF] [IN STOCK] PNY  RTX 5090 32GB ARGB Overclocked Triple Fan - 3799,99 | https://www.grosbill.com/carte-graphique/pny-rtx-5090-32gb-argb-overclocked-triple-fan-150241.aspx
+2025-03-23 01:06:16.828 +01:00 [INF] [IN STOCK]  - 3799€99 | 
+2025-03-23 01:07:22.346 +01:00 [INF] In-stock products:
+2025-03-23 01:07:22.364 +01:00 [INF] [IN STOCK] PNY  RTX 5090 32GB ARGB Overclocked Triple Fan - 3799,99 | https://www.grosbill.com/carte-graphique/pny-rtx-5090-32gb-argb-overclocked-triple-fan-150241.aspx
+2025-03-23 01:07:22.369 +01:00 [INF] [IN STOCK]  - 3799€99 | 
+2025-03-23 01:11:46.670 +01:00 [INF] In-stock products:
+2025-03-23 01:11:46.691 +01:00 [INF] [IN STOCK] Unnamed Product - 3799€99 | https://www.grosbill.com/carte-graphique/pny-rtx-5090-32gb-argb-overclocked-triple-fan-150241.aspx
+2025-03-23 01:11:46.693 +01:00 [INF] [IN STOCK] Unnamed Product - 3799€99 | 
+2025-03-23 01:12:04.882 +01:00 [INF] In-stock products:
+2025-03-23 01:12:04.901 +01:00 [INF] [IN STOCK] PNY  RTX 5090 32GB ARGB Overclocked Triple Fan - 3799,99 | https://www.grosbill.com/carte-graphique/pny-rtx-5090-32gb-argb-overclocked-triple-fan-150241.aspx
+2025-03-23 01:12:04.903 +01:00 [INF] [IN STOCK]  - 3799€99 | 
+2025-03-23 01:28:50.622 +01:00 [INF] In-stock products:
+2025-03-23 01:28:50.645 +01:00 [INF] [IN STOCK] PNY  RTX 5090 32GB Overclocked Triple Fan - 3699,99 | https://www.grosbill.com/carte-graphique/pny-rtx-5090-32gb-overclocked-triple-fan-150242.aspx
+2025-03-23 01:28:50.647 +01:00 [INF] [IN STOCK] PNY  RTX 5090 32GB ARGB Overclocked Triple Fan - 3799,99 | https://www.grosbill.com/carte-graphique/pny-rtx-5090-32gb-argb-overclocked-triple-fan-150241.aspx
