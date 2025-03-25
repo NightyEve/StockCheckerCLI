@@ -27,6 +27,9 @@ class Program
         var oneFodiscountUrl = config["ScraperSettings:Onefodiscount:Url"] ?? throw new ArgumentNullException("ScraperSettings:Url is not defined in appsettings.json");
         var grosbillUrl = config["ScraperSettings:Grosbill:Url"] ?? throw new ArgumentNullException("ScraperSettings:Url is not defined in appsettings.json");
         var ldlcUrl = config["ScraperSettings:LDLC:Url"] ?? throw new ArgumentNullException("ScraperSettings:Url is not defined in appsettings.json");
+        var pccomponentesUrl = config["ScraperSettings:PCComponentes:Url"] ?? throw new ArgumentNullException("ScraperSettings:Url is not defined in appsettings.json");
+        var infomaxUrl = config["ScraperSettings:InfomaxParis:Url"] ?? throw new ArgumentNullException("ScraperSettings:Url is not defined in appsettings.json");
+
 
         // Scrape 1fodiscount
         IScraper oneFodiscountScraper = new OneFodiscountScraper(oneFodiscountUrl);
@@ -39,13 +42,22 @@ class Program
         // Scrape LDLC
         IScraper ldlcScraper = new LDLCWebScraper(ldlcUrl);
         List<Product> ldlcProducts = await ldlcScraper.ScrapeAsync();
-        
 
+        // Scrape PCComponentes
+        IScraper pccomponentesScraper = new PCComponentesScraper(pccomponentesUrl);
+        List<Product> pccomponentesProducts = await pccomponentesScraper.ScrapeAsync();
+        
+        // Scrape Infomax Paris
+        IScraper infomaxScraper = new InfomaxParisScraper(infomaxUrl);
+        List<Product> infomaxProducts = await infomaxScraper.ScrapeAsync();
+        
         // Combine products from both sites
         var allProducts = new List<Product>();
         allProducts.AddRange(oneFodiscountProducts);
         allProducts.AddRange(grosbillProducts);
         allProducts.AddRange(ldlcProducts);
+        allProducts.AddRange(pccomponentesProducts);
+        allProducts.AddRange(infomaxProducts);
 
         // Update PriceValue property for each product using the helper method
         foreach (var product in allProducts)
