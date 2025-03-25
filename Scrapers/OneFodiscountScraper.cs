@@ -25,6 +25,17 @@ namespace StockCheckerCLI.Scrapers
             try
             {
                 var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:136.0) Gecko/20100101 Firefox/136.0");
+                httpClient.DefaultRequestHeaders.Accept.ParseAdd("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+                httpClient.DefaultRequestHeaders.AcceptLanguage.ParseAdd("fr,fr-FR;q=0.8,en-US;q=0.6,en;q=0.4,ru;q=0.2");
+                httpClient.DefaultRequestHeaders.Add("DNT", "1");
+                httpClient.DefaultRequestHeaders.Add("Upgrade-Insecure-Requests", "1");
+                httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "document");
+                httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "navigate");
+                httpClient.DefaultRequestHeaders.Add("Sec-Fetch-Site", "none");
+                httpClient.DefaultRequestHeaders.Add("Sec-Fetch-User", "?1");
+                httpClient.DefaultRequestHeaders.Add("Priority", "u=0, i");
+                
                 var response = await httpClient.GetStringAsync(_url);
 
                 var htmlDoc = new HtmlDocument();

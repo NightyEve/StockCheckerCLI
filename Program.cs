@@ -23,15 +23,17 @@ class Program
 
         var stockChecker = new StockChecker(config);
         var knownProducts = new Dictionary<string, Product>();
+        int previousLineCount = 0;
+        Console.Clear();
 
         while (true)
         {
-            Console.Clear();
+            Console.SetCursorPosition(0, 0);
             var now = DateTime.Now;
-            Console.WriteLine($"[Stock Check] {now:yyyy-MM-dd HH:mm:ss}");
+            Console.WriteLine($"[Stock Check] {now:yyyy-MM-dd HH:mm:ss}                ");
 
             var inStockProducts = await stockChecker.GetInStockProductsAsync();
-            Console.WriteLine($"Total in-stock products found: {inStockProducts.Count}\n");
+            Console.WriteLine($"Total in-stock products found: {inStockProducts.Count}                \n");
 
             var currentKeys = inStockProducts.Select(p => $"{p.Url}|{p.Name}").ToHashSet();
             var knownKeys = knownProducts.Keys.ToHashSet();
@@ -50,9 +52,21 @@ class Program
 
             if (newProducts.Any())
             {
-                Console.Beep();
+                Console.Beep(659, 125); // E5
+                Console.Beep(659, 125); // E5
+                Thread.Sleep(125);
+                Console.Beep(659, 125); // E5
+                Thread.Sleep(167);
+                Console.Beep(523, 125); // C5
+                Console.Beep(659, 125); // E5
+                Thread.Sleep(125);
+                Console.Beep(784, 125); // G5
+                Thread.Sleep(375);
+                Console.Beep(392, 125); // G4
+
             }
 
+            int lineCount = 2;
             foreach (var product in inStockProducts)
             {
                 string key = $"{product.Url}|{product.Name}";
@@ -83,9 +97,18 @@ class Program
                 Console.WriteLine(product.Url);
 
                 Console.ResetColor();
+                lineCount++;
             }
 
-            await Task.Delay(10000);
+            // Clear any extra lines from previous render
+            for (int i = lineCount; i < previousLineCount; i++)
+            {
+                Console.WriteLine(new string(' ', Console.WindowWidth));
+            }
+            previousLineCount = lineCount;
+
+            var random = new Random();
+            await Task.Delay(random.Next(8000, 15000));
         }
     }
 }
