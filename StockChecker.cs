@@ -23,11 +23,11 @@ namespace StockCheckerCLI.Core
         {
             var allProducts = new List<Product>();
 
-            var oneFodiscountUrl = _config["ScraperSettings:Onefodiscount:Url"] ?? throw new ArgumentNullException("ScraperSettings:Url is not defined in appsettings.json");
-            var grosbillUrl = _config["ScraperSettings:Grosbill:Url"] ?? throw new ArgumentNullException("ScraperSettings:Url is not defined in appsettings.json");
-            var ldlcUrl = _config["ScraperSettings:LDLC:Url"] ?? throw new ArgumentNullException("ScraperSettings:Url is not defined in appsettings.json");
-            var pccomponentesUrl = _config["ScraperSettings:PCComponentes:Url"] ?? throw new ArgumentNullException("ScraperSettings:Url is not defined in appsettings.json");
-            var infomaxUrl = _config["ScraperSettings:InfomaxParis:Url"] ?? throw new ArgumentNullException("ScraperSettings:Url is not defined in appsettings.json");
+            var oneFodiscountUrl = _config["ScraperSettings:Onefodiscount:Url"] ?? throw new ArgumentNullException("ScraperSettings:Onefodiscount:Url");
+            var grosbillUrl = _config["ScraperSettings:Grosbill:Url"] ?? throw new ArgumentNullException("ScraperSettings:Grosbill:Url");
+            var ldlcUrl = _config["ScraperSettings:LDLC:Url"] ?? throw new ArgumentNullException("ScraperSettings:LDLC:Url");
+            var pccomponentesUrl = _config["ScraperSettings:PCComponentes:Url"] ?? throw new ArgumentNullException("ScraperSettings:PCComponentes:Url");
+            var infomaxUrl = _config["ScraperSettings:InfomaxParis:Url"] ?? throw new ArgumentNullException("ScraperSettings:InfomaxParis:Url");
 
             var scrapers = new List<IScraper>
             {
@@ -56,7 +56,9 @@ namespace StockCheckerCLI.Core
             }
 
             return allProducts
-                .Where(p => p.Status == StockStatus.InStock)
+                .Where(p => p.Status == StockStatus.InStock && !string.IsNullOrWhiteSpace(p.Url) && p.PriceValue > 1)
+                .GroupBy(p => p.Url)
+                .Select(g => g.First())
                 .OrderBy(p => p.PriceValue)
                 .ToList();
         }
