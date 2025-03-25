@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
-using Microsoft.Extensions.Configuration;
 using Serilog;
 using StockCheckerCLI.Models;
 
@@ -31,46 +30,43 @@ namespace StockCheckerCLI.Scrapers
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(response);
 
-                // Select the product nodes using the specific XPath or class selector for 1fodiscount
+                // Select the product nodes using the specific XPath for 1fodiscount
                 var productNodes = htmlDoc.DocumentNode.SelectNodes("//div[contains(@class, 'product-tile_buybox')]");
                 
                 if (productNodes != null)
                 {
                     foreach (var productNode in productNodes)
                     {
-                        var product = new Product();
-
-                        // Determine the stock status based on CSS classes
+                        // --- Early Stock Check ---
                         var stockDiv = productNode.SelectSingleNode(".//div[contains(@class, 'product-tile_stock')]");
-                        if (stockDiv != null)
+                        if (stockDiv == null)
+                            continue;
+                        var stockClass = stockDiv.GetAttributeValue("class", "");
+                        // Process only products with the "-inStock" indicator
+                        if (!stockClass.Contains("-inStock"))
+                            continue;
+
+                        // --- Continue extraction for in-stock products ---
+                        var product = new Product();
+                        product.Status = StockStatus.InStock;
+
+                        // Extract product URL and Name from the parent tile
+                        var parentTile = productNode.ParentNode;
+                        var linkNode = parentTile.SelectSingleNode(".//a[contains(@class, 'title')]");
+                        if (linkNode != null)
                         {
-                            var stockClass = stockDiv.GetAttributeValue("class", "");
+                            var productUrl = linkNode.GetAttributeValue("href", "");
+                            product.Url = $"https://www.1fodiscount.com{productUrl}";
+                            product.Name = WebUtility.HtmlDecode(linkNode.InnerText.Trim());
+                        }
 
-                            if (stockClass.Contains("-inStock"))
-                                product.Status = StockStatus.InStock;
-                            else if (stockClass.Contains("-delay"))
-                                product.Status = StockStatus.Delay;
-                            else if (stockClass.Contains("-rupture"))
-                                product.Status = StockStatus.Rupture;
-                            else
-                                product.Status = StockStatus.Unknown;
+                        // Extract and decode the product price
+                        var priceNode = productNode.SelectSingleNode(".//div[contains(@class, 'product-tile_buybox_offers_offer_price')]");
+                        product.Price = priceNode != null ? WebUtility.HtmlDecode(priceNode.InnerText.Trim()) : "Unavailable";
 
-                            // Extract product URL and name from the parent tile
-                            var parentTile = productNode.ParentNode;
-                            var linkNode = parentTile.SelectSingleNode(".//a[contains(@class, 'title')]");
-                            if (linkNode != null)
-                            {
-                                var productUrl = linkNode.GetAttributeValue("href", "");
-                                product.Url = $"https://www.1fodiscount.com{productUrl}";
-
-                                // Decode HTML entities in the product name
-                                product.Name = WebUtility.HtmlDecode(linkNode.InnerText.Trim());
-                            }
-
-                            // Extract and decode the product price
-                            var priceNode = productNode.SelectSingleNode(".//div[contains(@class, 'product-tile_buybox_offers_offer_price')]");
-                            product.Price = priceNode != null ? WebUtility.HtmlDecode(priceNode.InnerText.Trim()) : "Unavailable";
-
+                        // Only add the product if a valid name and URL were found
+                        if (!string.IsNullOrWhiteSpace(product.Name) && !string.IsNullOrWhiteSpace(product.Url))
+                        {
                             products.Add(product);
                         }
                     }
