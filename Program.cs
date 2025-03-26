@@ -50,20 +50,22 @@ class Program
                 .Where(p => addedKeys.Contains($"{p.Url}|{p.Name}"))
                 .ToList();
 
-            if (newProducts.Any())
+            if (newProducts.Any(p => p.PriceValue < 3000))
             {
-                Console.Beep(659, 125); // E5
-                Console.Beep(659, 125); // E5
-                Thread.Sleep(125);
-                Console.Beep(659, 125); // E5
-                Thread.Sleep(167);
-                Console.Beep(523, 125); // C5
-                Console.Beep(659, 125); // E5
-                Thread.Sleep(125);
-                Console.Beep(784, 125); // G5
-                Thread.Sleep(375);
-                Console.Beep(392, 125); // G4
-
+                _ = Task.Run(() =>
+                {
+                    Console.Beep(659, 125); // E5
+                    Console.Beep(659, 125); // E5
+                    Thread.Sleep(125);
+                    Console.Beep(659, 125); // E5
+                    Thread.Sleep(167);
+                    Console.Beep(523, 125); // C5
+                    Console.Beep(659, 125); // E5
+                    Thread.Sleep(125);
+                    Console.Beep(784, 125); // G5
+                    Thread.Sleep(375);
+                    Console.Beep(392, 125); // G4
+                });
             }
 
             int lineCount = 2;
@@ -73,6 +75,12 @@ class Program
                 string formattedPrice = product.PriceValue.ToString("F2") + "€";
 
                 // Price color (dark yellow/orange-like)
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                // Clear the current line before writing
+                Console.Write("\r" + new string(' ', Console.WindowWidth));
+                Console.SetCursorPosition(0, Console.CursorTop);
+
+                // Then write the new content
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.Write("[");
                 Console.Write(formattedPrice);
